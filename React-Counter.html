@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://unpkg.com/react@16.3.0/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@16.3.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+<script type="text/babel">
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {count: 0, label: 'Start'};
+  }
+  
+  handleToggleClick = (e) => {
+   if(this.state.label == 'Start') {
+     this.setState(({label}) => ({
+       label: 'Stop'
+     }))
+     
+     const startTime = Date.now() - this.state.count;
+     this.timer = setInterval(() => {
+       this.setState(({count}) => ({
+         count: Date.now() - startTime
+       }))
+     });
+   }else {
+    this.setState(({label}) => ({
+       label: 'Start'
+     }));
+     clearInterval(this.timer);
+   }
+  }
+  
+  handleClear = (e) => {
+    this.setState(({count}) => ({
+      count: 0
+    }))
+  }
+  
+  render() {
+    const counterStyle = {padding:30};
+    const buttonStyle  = {paddingLeft:20, paddingBottom: 10};
+    return (
+      <div>
+        <div style={counterStyle}>{this.state.count}</div>
+        <div style={buttonStyle}><button onClick={this.handleToggleClick}>{this.state.label}</button></div>
+        <div style={buttonStyle}><button onClick={this.handleClear}>Clear</button></div>
+       </div>
+     );
+  }
+}
+
+ReactDOM.render(
+  <Counter />,
+  document.getElementById('root'),
+)
+</script>
+</body>
+</html>
